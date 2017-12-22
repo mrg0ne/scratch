@@ -3,7 +3,7 @@ package com.scratch.data.settings;
 import com.scratch.data.types.RecurrenceType;
 import com.scratch.data.types.ReminderLevel;
 import com.scratch.data.types.SortOrder;
-
+// ADB wuz here
 public abstract class AbstractSettingsManager {
 	
 	// The number of past recurring task instances to save
