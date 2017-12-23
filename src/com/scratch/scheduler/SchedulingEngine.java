@@ -146,8 +146,7 @@ public class SchedulingEngine {
 		Calendar newCal = Calendar.getInstance();
 		newCal.setTime(oldDueDate);
 		newCal.setFirstDayOfWeek(Calendar.MONDAY);
-		//		newCal.set(Calendar.YEAR, nowCal.get(Calendar.YEAR));		
-		//		newCal.set(Calendar.DAY_OF_YEAR, nowCal.get(Calendar.DAY_OF_YEAR));
+
 		Calendar oldCal = Calendar.getInstance();
 		oldCal.setFirstDayOfWeek(Calendar.MONDAY);
 		oldCal.setTime(oldDueDate);
@@ -277,7 +276,6 @@ public class SchedulingEngine {
 				}
 
 				// Only check the weekdays once new cal is in the future
-				//if (newCal.getTime().getTime() > nowCal.getTime().getTime()) {
 				if (newCal.getTime().getTime() > oldCal.getTime().getTime()) {
 					// Check if the task should occur on this day
 					if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) && recurrence.isOnMonday()) {
@@ -435,7 +433,7 @@ public class SchedulingEngine {
 		Calendar newCal = Calendar.getInstance();
 		newCal.setFirstDayOfWeek(Calendar.MONDAY);
 		newCal.setTime(oldDueDate);
-		newCal.set(Calendar.MONTH, recurrence.getMonth());
+		//newCal.set(Calendar.MONTH, recurrence.getMonth());
 
 		Calendar nowCal = Calendar.getInstance();
 		nowCal.setFirstDayOfWeek(Calendar.MONDAY);
@@ -448,10 +446,6 @@ public class SchedulingEngine {
 		if (pTask.isTaskCompleted()) {
 			Task newTask = new Task(pTask);
 			newTask.setTaskCompleted(false);
-
-			if (newCal.getTime().getTime() > nowCal.getTime().getTime()) {				
-				newDueDateFound = true;
-			}
 
 			while (!newDueDateFound){			
 				newCal.add(Calendar.YEAR, regularity);
