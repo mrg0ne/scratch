@@ -107,8 +107,8 @@ public class MakeDailyRecurringTaskActivity extends Activity {
 		recurrence.setOnFriday(mFridayCheckBox.isChecked());
 		recurrence.setOnSaturday(mSaturdayCheckBox.isChecked());
 		recurrence.setOnSunday(mSundayCheckBox.isChecked());
-		recurrence.setTimeOfDay((mTimeDuePicker.getCurrentMinute().intValue()*1000) 
-				+ (mTimeDuePicker.getCurrentHour()*60000));
+		recurrence.setTimeOfDay((mTimeDuePicker.getCurrentMinute().intValue()*60000) 
+				+ (mTimeDuePicker.getCurrentHour()*3600000));
 		
 		mTask.setRecurrence(recurrence);		
 		mLogger.log(Level.INFO, mTask.getRecurrence().toString());

@@ -251,8 +251,8 @@ public class MakeMonthlyRecurringTaskActivity extends Activity {
 			mLogger.log(Level.WARNING, "No radio buttons have been checked");
 		}
 		
-		recurrence.setTimeOfDay((mTimeDuePicker.getCurrentMinute().intValue()*1000) 
-				+ (mTimeDuePicker.getCurrentHour()*60000));
+		recurrence.setTimeOfDay((mTimeDuePicker.getCurrentMinute().intValue()*60000) 
+				+ (mTimeDuePicker.getCurrentHour()*3600000));
 		
 		mTask.setRecurrence(recurrence);		
 		

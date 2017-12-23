@@ -246,9 +246,7 @@ public class MakeYearlyRecurringTaskActivity extends Activity {
 		if (mDayRadioButton.isChecked()) {
 			recurrence.setUseDay(true);
 			Calendar cal = Calendar.getInstance();
-			cal.set(Calendar.YEAR, mDayDatePicker.getYear());
-			cal.set(Calendar.MONTH, mDayDatePicker.getMonth());
-			cal.set(Calendar.DAY_OF_MONTH, mDayDatePicker.getDayOfMonth());
+			cal.set(mDayDatePicker.getYear(), mDayDatePicker.getMonth(), mDayDatePicker.getDayOfMonth(), 0, 0, 0);
 			Date dueDate = cal.getTime();
 			mTask.setDueDate(dueDate);
 			recurrence.setMonth(mDayDatePicker.getMonth());
@@ -293,8 +291,8 @@ public class MakeYearlyRecurringTaskActivity extends Activity {
 			mLogger.log(Level.WARNING, "No radio buttons have been checked");
 		}
 
-		recurrence.setTimeOfDay((mTimeDuePicker.getCurrentMinute().intValue()*1000) 
-				+ (mTimeDuePicker.getCurrentHour()*60000));
+		recurrence.setTimeOfDay((mTimeDuePicker.getCurrentMinute().intValue()*60000) 
+				+ (mTimeDuePicker.getCurrentHour()*3600000));
 		Date dueDate = mTask.getDueDate();
 		dueDate.setTime(dueDate.getTime()+recurrence.getTimeOfDay());
 		mTask.setDueDate(dueDate);
