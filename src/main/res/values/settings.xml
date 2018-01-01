@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preferences_file_key">settings</string>
+    <string name="recurring_task_history_size">recurring_task_history_size</string>
+    <string name="default_time_due">default_time_due</string>
+    <string name="default_reminder_time">default_reminder_time</string>
+    <string name="tool_tips_on">tool_tips_on</string>
+    <string name="auto_scheduler_on">auto_scheduler_on</string>
+    <string name="default_notification_email_addr">default_notification_email_addr</string>
+    <string name="default_reminder_level">default_reminder_level</string>
+    <string name="default_task_recurrence">default_task_recurrence</string>
+    <string name="sort_order_complete_tasks">sort_order_complete_tasks</string>
+    <string name="sort_order_incomplete_tasks">sort_order_incomplete_tasks</string>
+    <string name="sort_order_all_tasks">sort_order_all_tasks</string>
+    <string name="time_for_showing_future_tasks">time_for_showing_future_tasks</string>
+</resources>
