@@ -33,15 +33,14 @@ dependencies {
  * build options.
  */
 android {
-
     /**
      * compileSdkVersion specifies the Android API level Gradle should use to
      * compile your app. This means your app can use the API features included in
      * this API level and lower.
      */
-
+    signingConfigs {
+    }
     compileSdkVersion 27
-
     /**
      * buildToolsVersion specifies the version of the SDK build tools, command-line
      * utilities, and compiler that Gradle should use to build your app. You need to
@@ -50,16 +49,13 @@ android {
      * If you're using Android plugin 3.0.0 or higher, this property is optional—
      * the plugin uses a recommended version of the build tools by default.
      */
-
     buildToolsVersion "26.0.2"
-
     /**
      * The defaultConfig block encapsulates default settings and entries for all
      * build variants, and can override some attributes in main/AndroidManifest.xml
      * dynamically from the build system. You can configure product flavors to override
      * these values for different versions of your app.
      */
-
     defaultConfig {
 
         /**
@@ -71,7 +67,7 @@ android {
         applicationId "com.scratch"
 
         // Defines the minimum API level required to run the app.
-        minSdkVersion 15
+        minSdkVersion 25
 
         // Specifies the API level used to test the app.
         targetSdkVersion 27
@@ -82,7 +78,6 @@ android {
         // Defines a user-friendly version name for your app.
         versionName "1.0"
     }
-
     /**
      * The buildTypes block is where you can configure multiple build types.
      * By default, the build system defines two build types: debug and release. The
@@ -90,7 +85,6 @@ android {
      * but it includes debugging tools and is signed with the debug key. The release
      * build type applies Proguard settings and is not signed by default.
      */
-
     buildTypes {
 
         /**
@@ -103,7 +97,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     /**
      * The productFlavors block is where you can configure multiple product
      * flavors. This allows you to create different versions of your app that can
@@ -121,21 +114,19 @@ android {
     productFlavors {
         free {
             dimension 'free'
-            minSdkVersion 15
+            minSdkVersion 21
             applicationId 'com.scratch'
             targetSdkVersion 27
             versionCode 1
             versionName '1.0'
         }
     }
-
     /**
      * The splits block is where you can configure different APK builds that
      * each contain only code and resources for a supported screen density or
      * ABI. You'll also need to configure your build so that each APK has a
      * different versionCode.
      */
-
     splits {
         // Settings to build multiple APKs based on screen density.
         density {

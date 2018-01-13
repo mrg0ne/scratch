@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.os.Bundle;
+import com.scratch.R;
 
 public class DatePickerFragment extends DialogFragment {
 
@@ -51,7 +52,7 @@ public class DatePickerFragment extends DialogFragment {
 
 		// Create a new instance of DatePickerDialog and return it
 		Activity a = getActivity();
-		DatePickerDialog dialog = new DatePickerDialog(a, mDateSetListener, 
+		DatePickerDialog dialog = new DatePickerDialog(a, mDateSetListener,
 				year, month, day);
 		dialog.getDatePicker().setTag(this.getTag());
 		return dialog;
