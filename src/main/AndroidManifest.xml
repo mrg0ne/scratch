@@ -5,15 +5,9 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="17"
+        android:minSdkVersion="21"
         android:targetSdkVersion="27" />
-<!--
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
--->
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -32,29 +26,29 @@
         
         <activity 
             android:name="com.scratch.gui.EditTaskActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/ScratchNoTitleBar" />
         <activity 
-            android:name="com.scratch.gui.NewTaskActivity" 
-            android:theme="@android:style/Theme.Light.NoTitleBar"/>
+            android:name="com.scratch.gui.NewTaskActivity"
+            android:theme="@style/ScratchNoTitleBar"/>
         <activity 
             android:name="com.scratch.gui.MakeRecurringTaskActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/ScratchNoTitleBar" />
         
         <activity 
             android:name="com.scratch.gui.MakeDailyRecurringTaskActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/ScratchNoTitleBar" />
         
         <activity 
             android:name="com.scratch.gui.MakeWeeklyRecurringTaskActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/ScratchNoTitleBar" />
         
         <activity 
             android:name="com.scratch.gui.MakeMonthlyRecurringTaskActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/ScratchNoTitleBar" />
         
         <activity 
-            android:name="com.scratch.gui.MakeYearlyRecurringTaskActivity"            
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:name="com.scratch.gui.MakeYearlyRecurringTaskActivity"
+            android:theme="@style/ScratchNoTitleBar" />
 
         <service android:name=".scheduler.TaskSchedulingService" />
                 
