@@ -278,23 +278,10 @@ public abstract class AbstractTaskActivity extends FragmentActivity {
 		// If time due is set, initialize the picker to the time that is set
 		if (!mTimeDue.getText().toString().isEmpty()){			
 			SimpleDateFormat dateFormat = new SimpleDateFormat(TIME_FORMAT);
-
-			try {
-				Date date = dateFormat.parse((String) mTimeDue.getText());
+				Date date = mTask.getDueDate();
 				cal.setTime(date);
 				hour = cal.get(Calendar.HOUR_OF_DAY);
-				hour+=1;
 				minute = cal.get(Calendar.MINUTE);
-
-				// Convert to 24 hour clock
-//				if (cal.get(Calendar.AM_PM) == Calendar.PM){
-//					hour+=12;
-//				}
-			} catch (ParseException pe) {
-				mLogger.log(Level.WARNING, "Failed to parse Time Due string: " 
-						+ mTimeDue.getText());
-				pe.printStackTrace();
-			}
 		}
 
 		TimePickerFragment timePicker = 
@@ -378,33 +365,24 @@ public abstract class AbstractTaskActivity extends FragmentActivity {
 		int hour = cal.get(Calendar.HOUR_OF_DAY);		
 		int minute = cal.get(Calendar.MONTH);
 
-		if (minute < 30 && minute != 0) {
-			minute = 30;
-		} else if (minute > 30) {
-			minute = 0;
-			hour++;
-		}
+
 
 		// If reminder time is set, initialize the picker to the time that is set
-		if (!mReminderTimeText.getText().toString().isEmpty()){			
-			SimpleDateFormat dateFormat = new SimpleDateFormat(TIME_FORMAT);
+		if (!mReminderTimeText.getText().toString().isEmpty()){
+			Date date = mTask.getReminderDate();
 
-			try {
-				Date date = dateFormat.parse((String) mReminderTimeText.getText());
-				cal.setTime(date);
-				hour = cal.get(Calendar.HOUR_OF_DAY);
-				minute = cal.get(Calendar.MINUTE);
-
-				// Convert to 24 hour clock
-//				if (cal.get(Calendar.AM_PM) == Calendar.PM){
-//					hour+=12;
-//				}
-			} catch (ParseException pe) {
-				mLogger.log(Level.WARNING, "Failed to parse Reminder Time string: " 
-						+ mReminderTimeText.getText());
-				pe.printStackTrace();
-			}
-		}
+			cal.setTime(date);
+			hour = cal.get(Calendar.HOUR_OF_DAY);
+			minute = cal.get(Calendar.MINUTE);
+		} else {
+		    // Round minute to a half/hour and advance by one hour
+            if (minute < 30 && minute != 0) {
+                minute = 30;
+            } else if (minute > 30) {
+                minute = 0;
+                hour++;
+            }
+        }
 
 		TimePickerFragment timePicker = 
 				TimePickerFragment.newInstance(hour, minute, 
@@ -427,20 +405,13 @@ public abstract class AbstractTaskActivity extends FragmentActivity {
 
 		// If due date is set, initialize the picker to the date that is set
 		if (!mDueDate.getText().toString().isEmpty() && 
-				!mDueDate.getText().equals("0")){			
-			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+				!mDueDate.getText().equals("0")){
+			Date date = mTask.getDueDate();
 
-			try {
-				Date date = dateFormat.parse((String) mDueDate.getText());
-				cal.setTime(date);
-				year = cal.get(Calendar.YEAR);
-				month = cal.get(Calendar.MONTH);
-				day = cal.get(Calendar.DAY_OF_MONTH);
-			} catch (ParseException pe) {
-				mLogger.log(Level.WARNING, "Failed to parse Due Date string: " 
-						+ mDueDate.getText());
-				pe.printStackTrace();
-			}
+			cal.setTime(date);
+			year = cal.get(Calendar.YEAR);
+			month = cal.get(Calendar.MONTH);
+			day = cal.get(Calendar.DAY_OF_MONTH);
 		}
 
 		DatePickerFragment datePicker = 
