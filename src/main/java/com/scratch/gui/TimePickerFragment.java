@@ -10,6 +10,8 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.os.Bundle;
 import android.widget.TimePicker;
 
+import java.util.Calendar;
+
 public class TimePickerFragment extends DialogFragment {
 
 	public static final String DEFAULT_HOUR_KEY = "DEFAULT_HOUR_KEY";
@@ -39,12 +41,14 @@ public class TimePickerFragment extends DialogFragment {
 	public Dialog onCreateDialog(Bundle pSavedInstanceState) {
 		SharedPreferencesSettingsManager settings = 
 				new SharedPreferencesSettingsManager(getActivity().getBaseContext());
-		int hour = getArguments().getInt(DEFAULT_HOUR_KEY);
-		int minute = getArguments().getInt(DEFAULT_MINUTE_KEY);
-		/*
-		int hour = (int)settings.getDefaultTimeDue()/(60*60*1000);
-		int minute = (int)settings.getDefaultTimeDue()% (1000*60);
-*/
+		Calendar cal = Calendar.getInstance();
+		int hour = cal.getTime().getHours();
+		int minute = cal.getTime().getMinutes();
+
+		if  (getArguments() != null) {
+			hour = getArguments().getInt(DEFAULT_HOUR_KEY);
+			minute = getArguments().getInt(DEFAULT_MINUTE_KEY);
+		}
 
 		Activity a = getActivity();
 

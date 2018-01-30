@@ -37,17 +37,16 @@ public class DatePickerFragment extends DialogFragment {
 		return f;
 	}
 
-
 	public Dialog onCreateDialog(Bundle pSavedInstanceState) {
 		Calendar cal = Calendar.getInstance();
 		int year = cal.get(Calendar.YEAR);
 		int month = cal.get(Calendar.MONTH);
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 
-		if (pSavedInstanceState != null) {
-			year = pSavedInstanceState.getInt(DEFAULT_YEAR_KEY);
-			month = pSavedInstanceState.getInt(DEFAULT_MONTH_KEY);
-			day = pSavedInstanceState.getInt(DEFAULT_DAY_KEY);
+		if (getArguments() != null) {
+			year = getArguments().getInt(DEFAULT_YEAR_KEY);
+			month = getArguments().getInt(DEFAULT_MONTH_KEY);
+			day = getArguments().getInt(DEFAULT_DAY_KEY);
 		}
 
 		// Create a new instance of DatePickerDialog and return it

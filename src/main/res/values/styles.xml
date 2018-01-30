@@ -14,13 +14,14 @@
 
         -->
         <item name="android:datePickerDialogTheme">@style/ScratchDatePickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/ScratchTimePickerDialogTheme</item>
     </style>
 
     <style name="ScratchDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
         <item name="android:datePickerStyle">@style/ScratchDatePickerStyle</item>
         <item name="android:colorAccent">@color/black_overlay</item>
         <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:textColorPrimaryInverse">@color/white</item>
+        <item name="android:textColorPrimaryInverse">@color/black</item>
     </style>
 
     <style name="ScratchDatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
@@ -31,10 +32,25 @@
         <item name="android:windowIsFloating">true</item>
     </style>
 
+    <style name="ScratchTimePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:timePickerStyle">@style/ScratchTimePickerStyle</item>
+        <item name="android:colorAccent">@color/black_overlay</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorPrimaryInverse">@color/black</item>
+    </style>
+
+    <style name="ScratchTimePickerStyle" parent="@android:style/Widget.Material.Light.TimePicker">
+        <item name="android:headerBackground">@color/green</item>
+        <item name="android:amPmBackgroundColor">@color/black</item>
+        <item name="android:amPmTextColor">@color/white</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:datePickerDialogTheme">@style/ScratchDatePickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/ScratchTimePickerDialogTheme</item>
     </style>
 
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
@@ -46,6 +62,7 @@
 
     <style name="ScratchNoTitleBar" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:datePickerDialogTheme">@style/ScratchDatePickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/ScratchTimePickerDialogTheme</item>
     </style>
 
     <style name="ButtonBar">
