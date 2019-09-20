@@ -5,20 +5,17 @@ import java.util.logging.Logger;
 
 import com.scratch.R;
 import com.scratch.data.storage.IDataStorage;
-import com.scratch.data.types.RecurringTask;
-import com.scratch.data.types.Task;
 import com.scratch.scheduler.TaskSchedulingService;
 
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerTitleStrip;
-import android.support.v4.view.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager.widget.PagerTitleStrip;
+import androidx.viewpager.widget.ViewPager;
 import android.widget.TextView;
 
 public class TaskListActivity extends FragmentActivity {

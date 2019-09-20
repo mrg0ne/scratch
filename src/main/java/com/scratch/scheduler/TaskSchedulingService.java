@@ -17,7 +17,6 @@ import com.scratch.data.types.Operation;
 import com.scratch.data.types.RecurringTask;
 import com.scratch.data.types.Task;
 import com.scratch.gui.EditTaskActivity;
-import com.scratch.gui.TaskListActivity;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -35,7 +34,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.Process;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class TaskSchedulingService extends Service {
 

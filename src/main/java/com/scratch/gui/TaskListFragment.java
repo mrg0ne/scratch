@@ -26,8 +26,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Messenger;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -42,13 +42,13 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.PagerTitleStrip;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SimpleCursorAdapter;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.PagerTitleStrip;
+import androidx.viewpager.widget.ViewPager;
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
 
 // This is the abstract base class for fragments that display a list
 // of Task objects.
