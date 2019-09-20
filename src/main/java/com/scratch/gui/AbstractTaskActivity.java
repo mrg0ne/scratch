@@ -16,7 +16,6 @@ import com.scratch.data.types.RecurringTask;
 import com.scratch.data.types.Task;
 import com.scratch.scheduler.TaskSchedulingService;
 
-import android.R;
 import android.app.Activity;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
@@ -28,7 +27,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;

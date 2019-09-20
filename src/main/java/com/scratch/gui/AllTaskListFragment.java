@@ -5,7 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import android.database.Cursor;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.scratch.data.storage.DbStorage;
 import com.scratch.data.storage.TaskContract.RecurringTaskEntry;
