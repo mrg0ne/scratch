@@ -131,7 +131,7 @@ public class SchedulingEngine {
 		TaskRecurrence recurrence = pRecurringTask.getRecurrence();
 
 		// If recurring task does not have any days set, return
-		if (!recurrence.isOnMonday() && !recurrence.isOnTuesday() && 
+		if (!recurrence.isOnMonday() && !recurrence.isOnTuesday() &&
 				!recurrence.isOnWednesday() && !recurrence.isOnThursday() 
 				&& !recurrence.isOnFriday() && !recurrence.isOnSaturday() 
 				&& !recurrence.isOnSunday()) {
@@ -247,7 +247,7 @@ public class SchedulingEngine {
 
 				// If now cal is less than new cal, check if the task should occur today
 				if (newCal.getTime().getTime() > nowCal.getTime().getTime()) {
-					if (newCal.isSet(Calendar.MONDAY) && recurrence.isOnMonday()) {
+					if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) && recurrence.isOnMonday()) {
 						newDueDateFound = true;
 					} else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY) && recurrence.isOnTuesday()) {
 						newDueDateFound = true;
