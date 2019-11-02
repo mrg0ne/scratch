@@ -17,6 +17,7 @@
     <string name="make_one_time_button">Make One-Time</string>
     <string name="reminder_date_button">Set Reminder Date</string>
     <string name="reminder_time_button">Set Reminder Time</string>
+    <string name="set_task_complete">Set Task Complete</string>
     <string name="action_delete">Delete</string>
     <string name="action_new">Create New Task</string>
     <string name="action_change_lists">Change Lists</string>
@@ -87,5 +88,9 @@
     <string name="unknown">Unknown</string>   
     
     <string name="default_font">fonts/Roboto-Light.ttf</string>
+    <string name="scheduling_svc_channel_name">TaskSchedulingChannel</string>
+    <string name="scheduling_svc_channel_description">Task Scheduling Notification Channel</string>
+    <string name="restart_svc_channel_name">RestartTaskSchedulingService</string>
+    <string name="restart_svc_description">Restart Task Scheduling Foreground Service</string>
 
 </resources>

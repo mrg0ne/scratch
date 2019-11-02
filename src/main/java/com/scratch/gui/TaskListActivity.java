@@ -36,10 +36,11 @@ public class TaskListActivity extends FragmentActivity {
     	mLogger.log(Level.INFO, "onCreate called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.task_pager_layout);
-        
+
         // Start TaskSchedulingService
+        //startForegroundService(new Intent(TaskListActivity.this, TaskSchedulingService.class));
         startService(new Intent(TaskListActivity.this, TaskSchedulingService.class));
-        
+
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
         mAdapter =
@@ -61,8 +62,14 @@ public class TaskListActivity extends FragmentActivity {
         IntentFilter filter = new IntentFilter();
 		filter.addAction(IDataStorage.DATASET_CHANGE);
 		this.registerReceiver(mDataSetChangeReceiver, filter);
-    }    
-    
+    }
+
+    @Override
+    protected void onDestroy() {
+	    unregisterReceiver(mDataSetChangeReceiver);
+        super.onDestroy();
+    }
+
     /**
      * BroadcastReceiver for data base updates. Notify task lists
      * that the data has changed in the database.

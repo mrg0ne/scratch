@@ -4,7 +4,8 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:targetSdkVersion="27" />
+    <uses-sdk android:targetSdkVersion="28" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:allowBackup="true"
@@ -48,8 +49,20 @@
             android:name="com.scratch.gui.MakeYearlyRecurringTaskActivity"
             android:theme="@style/ScratchNoTitleBar" />
 
-        <service android:name=".scheduler.TaskSchedulingService" />
-                
+        <service android:name="com.scratch.scheduler.TaskSchedulingService" />
+
+        <receiver android:name="com.scratch.scheduler.TaskBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.scratch.SET_TASK_COMPLETE"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.scratch.scheduler.TaskSchedulingRestarter">
+            <intent-filter>
+                <action android:name="com.scratch.RESTART_TASK_SCHEDULING_SERVICE"/>
+            </intent-filter>
+        </receiver>
+
         <provider android:name="com.scratch.data.storage.DbStorage"
             android:authorities="com.scratch.provider"
             android:enabled="true"

@@ -173,12 +173,12 @@ View.OnLongClickListener {
 		mTaskHash = new Hashtable<String, Task>();
 		setHasOptionsMenu(true);
 
-		PagerTitleStrip pagerTitleStrip = (PagerTitleStrip) getActivity()
+		PagerTitleStrip pagerTitleStrip = getActivity()
 				.findViewById(R.id.pager_title_strip);
 		pagerTitleStrip.setBackgroundColor(Color.GREEN);
 		//pagerTitleStrip.setTextColor(Color.BLACK);
 
-		ViewPager viewPager = (ViewPager) this.getActivity().findViewById(
+		ViewPager viewPager = this.getActivity().findViewById(
 				R.id.pager);
 		mPagerAdapter = (FragmentPagerAdapter) viewPager.getAdapter();
 	}
@@ -254,6 +254,7 @@ View.OnLongClickListener {
 
 	public void onStart() {
 		super.onStart();
+		mLogger.log(Level.INFO, "onStart called");
 		// Bind to the service
 		this.getActivity().bindService(
 				new Intent(this.getActivity(), TaskSchedulingService.class),
@@ -263,20 +264,26 @@ View.OnLongClickListener {
 	@Override
 	public void onStop() {
 		super.onStop();
-		mLogger.log(Level.INFO, "onStop called");
-
-		// Unbind from the service
-		if (mBound) {
-			this.getActivity().unbindService(mConnection);
-			mBound = false;
-		}
-
-		if (mDbStorage != null) {
-			mDbStorage.shutdown();
-		}
 	}
 
-	public boolean onLongClick(View pView) {
+    @Override
+    public void onDestroy() {
+        mLogger.log(Level.INFO, "onDestroy called");
+
+        // Unbind from the service
+        if (mBound) {
+            this.getActivity().unbindService(mConnection);
+            mBound = false;
+        }
+
+        if (mDbStorage != null) {
+            mDbStorage.shutdown();
+        }
+
+        super.onDestroy();
+    }
+
+    public boolean onLongClick(View pView) {
 		TextView idTextView = (TextView) pView.findViewById(R.id.name);
 		String id = idTextView.getText().toString();
 		Intent editIntent = new Intent(pView.getContext(),
