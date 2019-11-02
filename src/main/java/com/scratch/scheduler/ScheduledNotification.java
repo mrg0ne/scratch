@@ -19,7 +19,7 @@ public class ScheduledNotification implements Comparable<ScheduledNotification> 
 		mNextNotification = new Date(0);
 	}
 
-	public ScheduledNotification(Task pTask){
+	public ScheduledNotification(final Task pTask){
 		this();
 		mTask = pTask;
 		mNextNotification = calculateNextNotification(pTask);
@@ -54,7 +54,7 @@ public class ScheduledNotification implements Comparable<ScheduledNotification> 
 		this.mNextNotification = pNextNotification;
 	}
 	
-	private Date calculateNextNotification(Task pTask) {
+	private Date calculateNextNotification(final Task pTask) {
 		Date rDate;
 		Date now = new Date();
 		long nowTime = now.getTime();

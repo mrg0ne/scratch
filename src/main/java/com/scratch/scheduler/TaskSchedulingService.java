@@ -18,7 +18,8 @@ import com.scratch.data.types.RecurringTask;
 import com.scratch.data.types.Task;
 import com.scratch.gui.EditTaskActivity;
 
-import android.app.Notification;
+
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -34,6 +35,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.Process;
+
+import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class TaskSchedulingService extends Service {
@@ -66,14 +69,25 @@ public class TaskSchedulingService extends Service {
 
 	private BroadcastReceiver mReceiver;
 
+	private NotificationChannel mChannel;
+
+	private NotificationManager mNotificationManager;
+
+	private int mNotificationId;
+
+	// Notification channel ID
+	private String mChannelId;
+
 	public TaskSchedulingService() {
 		super();
 		mLogger = Logger.getLogger(this.getClass().getName());
-		SHUTDOWN = true;
+		SHUTDOWN = false;
 		mTasks = new LinkedList<ScheduledNotification>();
 		mServiceHandler = null;
 		mServiceLooper = null;
 		mWorkerThread = null;
+		mChannelId = this.getClass().getName();
+		mNotificationId = 0;
 	}
 
 	/* (non-Javadoc)
@@ -86,6 +100,25 @@ public class TaskSchedulingService extends Service {
 		mSettingsMgr = new SharedPreferencesSettingsManager(this);
 		mScheduler = new SchedulingEngine(mSettingsMgr);
 		SHUTDOWN = false;
+
+		// The user-visible name of the channel.
+		CharSequence name = getString(R.string.channel_name);
+
+		// The user-visible description of the channel.
+		String description = getString(R.string.channel_description);
+
+		int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+		mChannel = new NotificationChannel(mChannelId, name, importance);
+
+		// Configure the notification channel.
+		mChannel.setDescription(description);
+
+		mNotificationManager =
+				(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mNotificationManager = getSystemService(NotificationManager.class);
+		mNotificationManager.createNotificationChannel(mChannel);
 
 		Vector<Task> tasks = mStorage.getAllIncompleteTasks();
 
@@ -121,6 +154,7 @@ public class TaskSchedulingService extends Service {
 		filter.addAction(REMOVE);
 
 		//this.registerReceiver(mReceiver, filter);
+
 		LocalBroadcastManager.getInstance(this).registerReceiver(
 				mReceiver, filter);
 	}
@@ -130,6 +164,7 @@ public class TaskSchedulingService extends Service {
 	 */
 	@Override
 	public void onDestroy() {
+		mLogger.log(Level.INFO, "onDestroy called");
 		super.onDestroy();
 		SHUTDOWN = true;
 
@@ -139,7 +174,9 @@ public class TaskSchedulingService extends Service {
 		}
 
 		mStorage.shutdown();
-		unregisterReceiver(mReceiver);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+		//unregisterReceiver(mReceiver);
+
 	}
 
 	/* (non-Javadoc)
@@ -147,6 +184,7 @@ public class TaskSchedulingService extends Service {
 	 */
 	public int onStartCommand(Intent pIntent, int pFlags, int pStartID) {
 		mLogger.log(Level.INFO, "onStartCommand called");
+		SHUTDOWN = false;
 		/*
 		if (pIntent == null){
 			mLogger.log(Level.INFO, "null Intent received");
@@ -221,7 +259,7 @@ public class TaskSchedulingService extends Service {
 		}
 	}
 	
-	private synchronized void addTask(Task pTask) {
+	private synchronized void addTask(final Task pTask) {
 		if (pTask.isTaskCompleted()){
 			return;
 		}
@@ -340,8 +378,8 @@ public class TaskSchedulingService extends Service {
 		mLogger.log(Level.INFO, "Sending Reminder notification");
 		Calendar cal = Calendar.getInstance();
 		cal .setTime(pTask.getDueDate());
-		Notification.Builder builder =
-				new Notification.Builder(this)
+		NotificationCompat.Builder builder =
+				new NotificationCompat.Builder(this, mChannelId)
 		//  .setSmallIcon(R.drawable.reminder_icon)
 		.setSmallIcon(R.drawable.ic_launcher)
 		.setContentTitle("Task Reminder")
@@ -380,12 +418,12 @@ public class TaskSchedulingService extends Service {
 		sendBroadcast(dataSetChangeIntent);
 	}
 	
-	private void sendDueNotification(Task pTask) {
-		mLogger.log(Level.INFO, "Sending Due notification");
+	private void sendDueNotification(final Task pTask) {
+		mLogger.log(Level.INFO, "Sending Due notification for task: " + pTask.getName());
 		Calendar cal = Calendar.getInstance();
 		cal .setTime(pTask.getDueDate());
-		Notification.Builder builder =
-				new Notification.Builder(this)
+		NotificationCompat.Builder builder =
+				new NotificationCompat.Builder(this, mChannelId)
 		//.setSmallIcon(R.drawable.due_icon)
 		.setSmallIcon(R.drawable.ic_launcher)
 		.setContentTitle("Task Due")
@@ -396,11 +434,12 @@ public class TaskSchedulingService extends Service {
 		sendNotification(builder, pTask);
 	}
 
-	private void sendOverDueNotification(Task pTask) {
+	private void sendOverDueNotification(final Task pTask) {
 		mLogger.log(Level.INFO, "Sending Overdue notification");
 		Calendar cal = Calendar.getInstance();
 		cal .setTime(pTask.getDueDate());
-		Notification.Builder builder = new Notification.Builder(this).setSmallIcon(R.drawable.ic_launcher)
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this, mChannelId)
+				.setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Task Overdue")
 				.setContentText(pTask.getName() + " due on " 
 						+ cal.get(Calendar.MONTH) + "/" + 
@@ -419,35 +458,29 @@ public class TaskSchedulingService extends Service {
 		sendNotification(builder, pTask);
 	}
 
-	private void sendNotification(Notification.Builder pBuilder, Task pTask){
-		Intent setCompleteIntent = new Intent(SET_TASK_COMPLETE);
+	private void sendNotification(NotificationCompat.Builder pBuilder, final Task pTask){
+		//Intent setCompleteIntent = new Intent(SET_TASK_COMPLETE);
+		Intent setCompleteIntent = new Intent(this, TaskBroadcastReceiver.class);
+		setCompleteIntent.setAction(SET_TASK_COMPLETE);
 		setCompleteIntent.putExtra(pTask.getClass().getName(), pTask);
-		
+		PendingIntent setCompletePendingIntent =
+				PendingIntent.getBroadcast(this, mNotificationId++, setCompleteIntent,
+						PendingIntent.FLAG_UPDATE_CURRENT);
+
 		Intent editIntent = new Intent(this, EditTaskActivity.class);
-		editIntent.setAction(Intent.ACTION_EDIT);
 		editIntent.putExtra(pTask.getClass().getName(), pTask);
 		editIntent.putExtra(Operation.class.getName(), Operation.UPDATE.ordinal());
 
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-		stackBuilder.addParentStack(EditTaskActivity.class);
-		stackBuilder.addNextIntent(editIntent);
-		PendingIntent editPendingIntent =
-				stackBuilder.getPendingIntent(
-						0,
-						PendingIntent.FLAG_UPDATE_CURRENT
-						);
-		pBuilder.setContentIntent(editPendingIntent);
+		PendingIntent editPendingIntent = PendingIntent.getActivity(this,
+						mNotificationId++,	editIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-		PendingIntent setCompletePendingIntent = 
-				PendingIntent.getBroadcast(this, 0, setCompleteIntent, 
-						PendingIntent.FLAG_CANCEL_CURRENT);
-		pBuilder.addAction(
-				R.drawable.ic_action_accept,
-				"Set Task Complete", 
-				setCompletePendingIntent);
-		NotificationManager notificationManager =
-				(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.notify((int)pTask.getKey(), pBuilder.build());
+		pBuilder.setContentIntent(editPendingIntent);
+		pBuilder.addAction(R.drawable.ic_action_accept, getString(R.string.set_task_complete), setCompletePendingIntent);
+		/*
+		pBuilder.setSmallIcon(R.drawable.ic_action_accept).setContentTitle("Set Task Complete")
+				.setContentIntent(setCompletePendingIntent).setChannelId(mChannelId);*/
+
+		mNotificationManager.notify((int)pTask.getKey(), pBuilder.build());
 	}
 
 	private synchronized void updateTask(RecurringTask pRecurringTask){
@@ -493,8 +526,7 @@ public class TaskSchedulingService extends Service {
 			while (!SHUTDOWN) {
 				try {
 					if (mTasks.isEmpty()) {
-						//mLogger.log(Level.INFO, "Task list is empty, " + 
-						//		"setting SHUTDOWN flag to TRUE");
+						mLogger.log(Level.INFO, "Task list is empty");
 						//SHUTDOWN = true;
 					} else {
 						ScheduledNotification schedTask = mTasks.getFirst();
@@ -649,10 +681,8 @@ public class TaskSchedulingService extends Service {
 					mLogger.log(Level.WARNING, "Intent does not contain " + 
 				       "a Task or RecurringTask object");
 				}
-				
-				NotificationManager notificationManager =
-						(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				notificationManager.cancel((int)task.getKey());
+
+				mNotificationManager.cancel((int)task.getKey());
 			} else if (pIntent.getAction().equals(UPDATE)) {
 				mLogger.log(Level.INFO, "UPDATE Intent received");
 				if (task != null){

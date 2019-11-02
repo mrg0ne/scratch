@@ -9,7 +9,6 @@ import com.scratch.data.types.Operation;
 import com.scratch.data.types.RecurrenceType;
 import com.scratch.data.types.RecurringTask;
 import com.scratch.data.types.Task;
-import com.scratch.data.types.TaskRecurrence;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,7 +16,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;

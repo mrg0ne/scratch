@@ -48,8 +48,20 @@
             android:name="com.scratch.gui.MakeYearlyRecurringTaskActivity"
             android:theme="@style/ScratchNoTitleBar" />
 
-        <service android:name=".scheduler.TaskSchedulingService" />
-                
+        <service android:name="com.scratch.scheduler.TaskSchedulingService" />
+<!--
+        <receiver android:name=".scheduler.TaskSchedulingService$IntentReceiver">
+            <intent-filter>
+                <action android:name="com.scratch.SET_TASK_COMPLETE"/>
+            </intent-filter>
+        </receiver>
+-->
+        <receiver android:name="com.scratch.scheduler.TaskBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.scratch.SET_TASK_COMPLETE"/>
+            </intent-filter>
+        </receiver>
+
         <provider android:name="com.scratch.data.storage.DbStorage"
             android:authorities="com.scratch.provider"
             android:enabled="true"

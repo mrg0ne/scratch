@@ -1,5 +1,6 @@
 package com.scratch.gui;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,28 +74,28 @@ public class MakeMonthlyRecurringTaskActivity extends Activity {
 
 		setContentView(R.layout.make_monthly_recurring_task_layout);
 		
-		mRegularityPicker = (NumberPicker)findViewById(com.scratch.R.id.regularity);
+		mRegularityPicker = findViewById(com.scratch.R.id.regularity);
 		mRegularityPicker.setMinValue(1);
 		mRegularityPicker.setMaxValue(12);
 		mRegularityPicker.setValue(mTask.getRecurrence().getOccurenceRegularity());
 		
-		mDayRadioButton = (RadioButton)findViewById(
+		mDayRadioButton = findViewById(
 				com.scratch.R.id.day_picker_radiobutton);
 		
-		mDayText = (TextView)findViewById(com.scratch.R.id.day);
+		mDayText = findViewById(com.scratch.R.id.day);
 	
-		mDayNumberPicker = (NumberPicker)findViewById(
+		mDayNumberPicker = findViewById(
 				com.scratch.R.id.day_number_picker);		
 		mDayNumberPicker.setMinValue(1);
 		mDayNumberPicker.setMaxValue(31);
 		mDayNumberPicker.setValue(mTask.getRecurrence().getDayOfMonth());
 		
-		mWeekNumRadioButton = (RadioButton)findViewById(
+		mWeekNumRadioButton = findViewById(
 				com.scratch.R.id.weeknum_picker_radiobutton);
 		
-		mTheText = (TextView)findViewById(com.scratch.R.id.the);
+		mTheText = findViewById(com.scratch.R.id.the);
 		
-		mWeekNumPicker = (NumberPicker)findViewById(
+		mWeekNumPicker = findViewById(
 				com.scratch.R.id.weeknum_picker);
 		mWeekNumPicker.setDisplayedValues(new String[]{
 				getString(com.scratch.R.string.first),
@@ -106,7 +107,7 @@ public class MakeMonthlyRecurringTaskActivity extends Activity {
 		mWeekNumPicker.setMaxValue(4);
 		mWeekNumPicker.setValue(mTask.getRecurrence().getWeekNum().ordinal());
 		
-		mWeekDayPicker = (NumberPicker)findViewById(
+		mWeekDayPicker = findViewById(
 				com.scratch.R.id.weekday_picker);
 		mWeekDayPicker.setMinValue(0);
 		mWeekDayPicker.setMaxValue(6);
@@ -137,11 +138,11 @@ public class MakeMonthlyRecurringTaskActivity extends Activity {
 			mWeekDayPicker.setValue(0);
 		}
 		
-		mOfTheMonthText = (TextView)findViewById(com.scratch.R.id.of_the_month);
+		mOfTheMonthText = findViewById(com.scratch.R.id.of_the_month);
 		
 		TaskRecurrence recurrence = mTask.getRecurrence();
 		
-		mTimeDuePicker = (TimePicker)findViewById(com.scratch.R.id.time_due);
+		mTimeDuePicker = findViewById(com.scratch.R.id.time_due);
 		
 		Date dueDate = mTask.getDueDate();
 		mTimeDuePicker.setCurrentHour(dueDate.getHours());
@@ -251,9 +252,8 @@ public class MakeMonthlyRecurringTaskActivity extends Activity {
 			mLogger.log(Level.WARNING, "No radio buttons have been checked");
 		}
 		
-		recurrence.setTimeOfDay((mTimeDuePicker.getCurrentMinute().intValue()*60000) 
+		recurrence.setTimeOfDay((mTimeDuePicker.getCurrentMinute()*60000)
 				+ (mTimeDuePicker.getCurrentHour()*3600000));
-		
 		mTask.setRecurrence(recurrence);		
 		
 		Intent intent = new Intent();
