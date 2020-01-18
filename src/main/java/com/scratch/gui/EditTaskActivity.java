@@ -98,6 +98,11 @@ implements OnClickListener{
 		updateViews();
 	}
 
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
+
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
 	 */

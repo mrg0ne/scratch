@@ -23,6 +23,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -100,6 +101,8 @@ public abstract class AbstractTaskActivity extends FragmentActivity {
 	protected Task mTask = null;
 	
 	protected RecurringTask mRecurringTask = null;
+
+	protected Intent mTaskSchedulingServiceIntent;
 
 	/**
 	 * Class for interacting with the main interface of the service.
@@ -518,8 +521,17 @@ public abstract class AbstractTaskActivity extends FragmentActivity {
 		}
 	}
 
-	protected void onStart() {
-		super.onStart();
+	//protected void onStart() {
+	@Override
+	protected void onCreate(Bundle pSavedInstanceState) {
+		mLogger.log(Level.INFO, "onCreate called:" + pSavedInstanceState);
+		super.onCreate(pSavedInstanceState);
+		//mLogger.log(Level.INFO, "onStart called");
+		//super.onStart();
+
+		// Start TaskSchedulingService
+		//startForegroundService(new Intent(AbstractTaskActivity.this, TaskSchedulingService.class));
+
 		if (mDbStorage == null) {
 			mDbStorage = new DbStorage(getApplicationContext());
 		}
@@ -528,24 +540,36 @@ public abstract class AbstractTaskActivity extends FragmentActivity {
 			mSettingsManager= new SharedPreferencesSettingsManager(
 					getApplicationContext());
 		}
+
+
+		mTaskSchedulingServiceIntent = new Intent(this, TaskSchedulingService.class);
+
 		// Bind to the service
-		bindService(new Intent(this, TaskSchedulingService.class), mConnection,
+		bindService(mTaskSchedulingServiceIntent, mConnection,
 				Context.BIND_AUTO_CREATE);
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		mLogger.log(Level.INFO, "onDestroy called");
 		// Unbind from the service
 		if (mBound) {
 			unbindService(mConnection);
 			mBound = false;
 		}
 
+		//stopService(mTaskSchedulingServiceIntent);
 		if (mDbStorage != null){
 			mDbStorage.shutdown();
 		}
-	}	    
 
-	protected abstract void updateViews(); 
+		super.onDestroy();
+	}
+
+	protected abstract void updateViews();
 }

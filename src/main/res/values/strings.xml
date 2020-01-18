@@ -88,7 +88,9 @@
     <string name="unknown">Unknown</string>   
     
     <string name="default_font">fonts/Roboto-Light.ttf</string>
-    <string name="channel_name">TaskSchedulingChannel</string>
-    <string name="channel_description">Task Scheduling Notification Channel</string>
+    <string name="scheduling_svc_channel_name">TaskSchedulingChannel</string>
+    <string name="scheduling_svc_channel_description">Task Scheduling Notification Channel</string>
+    <string name="restart_svc_channel_name">RestartTaskSchedulingService</string>
+    <string name="restart_svc_description">Restart Task Scheduling Foreground Service</string>
 
 </resources>

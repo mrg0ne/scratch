@@ -29,6 +29,7 @@ public class NewTaskActivity extends AbstractTaskActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) {
+		mLogger.log(Level.INFO, "onCreate called:" + pSavedInstanceState);
 		super.onCreate(pSavedInstanceState);
 
 		if (mTask == null) {
