@@ -233,11 +233,19 @@ public class SchedulingEngine {
         Date oldDueDate = pTask.getDueDate();
         RecurringTask recurringTask = pRecurringTask;
         TaskRecurrence recurrence = recurringTask.getRecurrence();
+
+        // Check if the task recurrence is valid
+        if (!recurrence.isValid()) {
+            String errMsg = "Unable to generate next recurring weekly task for " +
+                    pRecurringTask.getName() + ". The TaskRecurrence is invalid: " + recurrence;
+            mLogger.log(Level.WARNING, errMsg);
+            throw new SchedulingException(errMsg);
+        }
+
         int regularity = recurrence.getOccurenceRegularity();
         Calendar newCal = Calendar.getInstance();
         newCal.setFirstDayOfWeek(Calendar.MONDAY);
         newCal.setTime(oldDueDate);
-        mLogger.log(Level.SEVERE, newCal.getTime().toString());
         Calendar nowCal = Calendar.getInstance();
         nowCal.setFirstDayOfWeek(Calendar.MONDAY);
         nowCal.setTime(now);
@@ -250,63 +258,50 @@ public class SchedulingEngine {
             Task newTask = new Task(pTask);
             newTask.setTaskCompleted(false);
 
-            // Check if this is still part of the same week that the old task was due on
-            if ((oldCal.get(Calendar.WEEK_OF_YEAR) == nowCal.get(Calendar.WEEK_OF_YEAR))
-                    &&
-                    (oldCal.get(Calendar.YEAR) == nowCal.get(Calendar.YEAR))) {
-                // Set new cal to the same day as now cal but keep the hours,minutes,seconds
-                newCal.set(Calendar.DAY_OF_YEAR, nowCal.get(Calendar.DAY_OF_YEAR));
+            // Iterate until a new due date is found
+            while (!newDueDateFound) {
+                int daysLeftInWeek = 0;
+                Calendar tmpCal = Calendar.getInstance();
+                tmpCal.setTime(newCal.getTime());
 
-                newCal.set(Calendar.YEAR, nowCal.get(Calendar.YEAR));
+                // Move tmpCal to Sunday
+                while (tmpCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    tmpCal.add(Calendar.DAY_OF_WEEK, 1);
+                    tmpCal.getTimeInMillis();
+                    daysLeftInWeek++;
+                }
 
-                // If now cal is less than new cal, check if the task should occur today
-                if (newCal.getTime().getTime() > nowCal.getTime().getTime()) {
-                    if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) && recurrence.isOnMonday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY) && recurrence.isOnTuesday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY) && recurrence.isOnWednesday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY) && recurrence.isOnThursday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) && recurrence.isOnFriday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) && recurrence.isOnSaturday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) && recurrence.isOnSunday()) {
-                        newDueDateFound = true;
+                // Check if we've found a week in the future
+                if (tmpCal.getTimeInMillis() > nowCal.getTimeInMillis()) {
+
+                    // Iterate over the days in this week to find the next available day
+                    for (int i = 0; i <= daysLeftInWeek; i++) {
+                        if (newCal.getTimeInMillis() > nowCal.getTimeInMillis()) {
+                            int dayOfWeek = newCal.get(Calendar.DAY_OF_WEEK);
+
+                            if ((newCal.getTimeInMillis() > oldCal.getTimeInMillis()) &&
+                                    recurrence.occursOnDay(dayOfWeek)) {
+                                newDueDateFound = true;
+                                break;
+                            } else {
+                                newCal.add(Calendar.DAY_OF_WEEK, 1);
+                                newCal.getTimeInMillis();
+                            }
+                        }
                     }
                 }
-            }
 
-            while (!newDueDateFound){
-                if (newCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY){
-                    // If this is not Sunday, move to the next day
-                    newCal.add(Calendar.DAY_OF_WEEK, 1);
-                } else {
+                // If a new due date was not found go to Monday and iterate to the next week
+                if (!newDueDateFound){
+                    // Ensure the week starts on Monday
+                    while (newCal.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+                        newCal.roll(Calendar.DAY_OF_WEEK, 1);
+                        newCal.getTimeInMillis();
+                    }
+
                     // Move to the next week that a due date should fall on
                     newCal.add(Calendar.WEEK_OF_YEAR, regularity);
-                    newCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                }
-
-                // Only check the weekdays once new cal is in the future
-                if (newCal.getTime().getTime() > oldCal.getTime().getTime()) {
-                    // Check if the task should occur on this day
-                    if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) && recurrence.isOnMonday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY) && recurrence.isOnTuesday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY) && recurrence.isOnWednesday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY) && recurrence.isOnThursday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) && recurrence.isOnFriday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) && recurrence.isOnSaturday()) {
-                        newDueDateFound = true;
-                    } else if ((newCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) && recurrence.isOnSunday()) {
-                        newDueDateFound = true;
-                    }
+                    newCal.getTimeInMillis();
                 }
             }
 

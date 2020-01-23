@@ -3,6 +3,8 @@ package com.scratch.data.types;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Calendar;
+
 public class TaskRecurrence implements Parcelable {
 	
 	// The Recurrence type
@@ -70,9 +72,9 @@ public class TaskRecurrence implements Parcelable {
 	
 	/**
 	 * @param pType
-	 * @param mOccurenceRegularity
-	 * @param mDayOfMonth
-	 * @param mOnMonday
+	 * @param pOccurenceRegularity
+	 * @param pDayOfMonth
+	 * @param pOnMonday
 	 * @param mOnTuesday
 	 * @param mOnWednesday
 	 * @param mOnThursday
@@ -360,4 +362,34 @@ public class TaskRecurrence implements Parcelable {
 				+ ", mTimeOfDay=" + mTimeOfDay + "]";
 	}
 
+	public boolean occursOnDay(int pDayOfWeek) {
+        if (((pDayOfWeek == Calendar.MONDAY) && isOnMonday()) ||
+                ((pDayOfWeek == Calendar.TUESDAY) && isOnTuesday()) ||
+                ((pDayOfWeek == Calendar.WEDNESDAY) && isOnWednesday()) ||
+                ((pDayOfWeek == Calendar.THURSDAY) && isOnThursday()) ||
+                ((pDayOfWeek == Calendar.FRIDAY) && isOnFriday()) ||
+                ((pDayOfWeek == Calendar.SATURDAY) && isOnSaturday()) ||
+                ((pDayOfWeek == Calendar.SUNDAY) && isOnSunday())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isValid() {
+	    if (mType == RecurrenceType.WEEKLY) {
+	        if ((occursOnDay(Calendar.MONDAY)) ||
+                    (occursOnDay(Calendar.TUESDAY)) ||
+                    (occursOnDay(Calendar.WEDNESDAY)) ||
+                    (occursOnDay(Calendar.THURSDAY)) ||
+                    (occursOnDay(Calendar.FRIDAY)) ||
+                    (occursOnDay(Calendar.SATURDAY)) ||
+                    (occursOnDay(Calendar.SUNDAY))) {
+	            return true;
+            } else {
+	            return false;
+            }
+        }
+	    return true;
+    }
 }
